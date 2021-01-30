@@ -1,4 +1,6 @@
 import React, { useState, useRef } from 'react';
+import Popup from 'reactjs-popup';
+import SignaturePad from 'react-signature-canvas';
 import './App.css';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
@@ -26,8 +28,10 @@ const [user] = useAuthState(auth);
 return (
   <div className="App">
     <header className="App-header">
-    Superchat
+    &#9998; PicChat
+    <SignOut />
     </header>
+   
       <section>
       {user ? <ChatRoom /> : <SignIn />}
       </section>
@@ -43,18 +47,28 @@ const signInWithGoogle = () => {
 return (
   <>
   <button onClick={signInWithGoogle}>Sign in with Google</button>
-  <p>Do not violate the community guidelines or you will be banned</p>
+  <p className="loginPar">Do not violate the community guidelines or you will be banned</p>
   </>
 )
 }
 
 function SignOut() {
 return auth.currentUser && (
-  <button onClick={() => auth.SignOut()}>Sign out</button>
+  <button onClick={() => auth.signOut()}>Sign out</button>
 )
 }
 
 function ChatRoom() {
+
+const [imageURL, setImageURL] = useState(null);
+
+const sigCanvas = useRef({});
+
+const clear = () => sigCanvas.current.clear();
+
+const save = () =>
+setImageURL(sigCanvas.current.getCanvas().toDataURL("image/svg/xml", 1.0));
+
 
 const empty = useRef()
 const messagesRef = firestore.collection('messages');
@@ -86,15 +100,48 @@ return (<>
 
     {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
 
+{imageURL ? (
+  <img
+    src={imageURL}
+    alt="drawing"
+    style={{
+      position: 'inherit',
+      display: 'flex',
+      alignItems: 'center',
+      flexDirection: 'row-reverse',
+      alignSelf: 'flex-end',
+      width: 'auto',
+      height: '60vh'
+    }}
+    />
+  ) : null }
     <span ref={empty}></span>
+
 
   </main>
 
   <form onSubmit={sendMessage}>
 
-    <input value={formValue} onChange={(e) => setFormValue(e.target.value)} placeholder="say something nice" />
+    <Popup modal trigger ={<button type="reset">&#9998;</button>}
+      closeDocumentOnClick = {false}
+      >
+        {close => (
+          <>
+      <SignaturePad
+      ref={sigCanvas}
+      canvasProps = {{className: "signatureCanvas"}}
+      />
+      <button className="canvButton" onClick={close}>Close</button>
+      <button className="canvButton" onClick={clear}>Clear</button>
+      <button type="submit" className="canvButton" onClick={save}>Save</button>
+      </>
+        )}
+    </Popup>
+  
 
-    <button type="submit" disabled={!formValue}>-></button>
+    <input value={formValue} onChange={(e) => setFormValue(e.target.value)} placeholder="Type your message" />
+
+    <button type="submit" disabled={!formValue}>&#9654;</button>
 
   </form>
 </>)
@@ -106,7 +153,7 @@ function ChatMessage(props){
 
     return (<>
       <div className={`message ${messageClass}`}>
-        <img src={photoURL || 'https://api.adorable.io/avatars/23/abott@adorable.png'} />
+        <img src={photoURL || 'https://api.adorable.io/avatars/23/abott@adorable.png'} alt='profile' />
         <p>{text}</p>
       </div>
     </>)
