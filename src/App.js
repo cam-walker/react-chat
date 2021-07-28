@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import Popup from 'reactjs-popup';
 import SignaturePad from 'react-signature-canvas';
 import './App.css';
+//import Canvas from './canvas';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
@@ -17,12 +18,10 @@ firebase.initializeApp({
   messagingSenderId: "824141881410",
   appId: "1:824141881410:web:68a867abf0dca7705ecddb",
 });
-
+/* A Firebase authorization */
 const auth = firebase.auth();
 const firestore = firebase.firestore();
-
-
-
+/* A Firebase authorization */
 function App() {
 const [user] = useAuthState(auth);
 return (
@@ -39,6 +38,7 @@ return (
   </div>
 );
 }
+/* Sign in */
 function SignIn() {
 const signInWithGoogle = () => {
   const provider = new firebase.auth.GoogleAuthProvider();
@@ -46,12 +46,12 @@ const signInWithGoogle = () => {
 }
 return (
   <>
-  <button onClick={signInWithGoogle}>Sign in with Google</button>
+  <button className="sign-in-button" onClick={signInWithGoogle}>Sign in with Google</button>
   <p className="loginPar">Do not violate the community guidelines or you will be banned</p>
   </>
 )
 }
-
+/* Sign out */
 function SignOut() {
 return auth.currentUser && (
   <button onClick={() => auth.signOut()}>Sign out</button>
@@ -59,25 +59,18 @@ return auth.currentUser && (
 }
 
 function ChatRoom() {
-
-const [imageURL, setImageURL] = useState(null);
-
-const sigCanvas = useRef({});
-
-const clear = () => sigCanvas.current.clear();
-
-const save = () =>
-setImageURL(sigCanvas.current.getCanvas().toDataURL("image/svg/xml", 1.0));
-
-
+/* Stores messages on database and assigns messages an ID */
 const empty = useRef()
 const messagesRef = firestore.collection('messages');
+const imagesRef = firestore.collection('images')
 const query = messagesRef.orderBy('createdAt').limit(25);
+const imageQuery = imagesRef.orderBy('createdAt').limit(25);
 
 const [messages] = useCollectionData(query, {idField: 'id'});
+const [imageMessages] = useCollectionData(imageQuery, {idField: 'id'});
 
 const [formValue, setFormValue] = useState('');
-
+/* Info displayed on database.  */
 const sendMessage = async(e) => {
 
   e.preventDefault();
@@ -88,18 +81,29 @@ const sendMessage = async(e) => {
     text: formValue,
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     uid,
-    photoURL
+    photoURL,
+    imageURL
   })
   setFormValue('');
 
   empty.current.scrollIntoView({ behavior: 'smooth'});
 }
 
+
+const [imageURL, setImageURL] = useState(null); 
+
+const sigCanvas = useRef({});
+
+const clear = () => sigCanvas.current.clear();
+/* Sends canvas drawing as message */
+const save = () =>
+setImageURL(sigCanvas.current.getCanvas().toDataURL("image/svg/xml", 1.0));
+
 return (<>
   <main>
 
     {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
-
+{/* Styling for the drawn message */}
 {imageURL ? (
   <img
     src={imageURL}
@@ -133,21 +137,19 @@ return (<>
       />
       <button className="canvButton" onClick={close}>Close</button>
       <button className="canvButton" onClick={clear}>Clear</button>
-      <button type="submit" className="canvButton" onClick={save}>Save</button>
-      </>
+      <button type="submit" className="canvButton" onClick={save}>Send</button>
+         </>
         )}
-    </Popup>
-  
-
-    <input value={formValue} onChange={(e) => setFormValue(e.target.value)} placeholder="Type your message" />
+    </Popup><input value={formValue} onChange={(e) => setFormValue(e.target.value)} placeholder="Type your message" />
 
     <button type="submit" disabled={!formValue}>&#9654;</button>
 
   </form>
 </>)
+
 }
 function ChatMessage(props){
-    const { text, uid, photoURL } = props.message;
+    const {text, uid, photoURL} = props.message;
 
     const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
 

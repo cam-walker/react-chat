@@ -9,7 +9,7 @@ body {
 }
 
 .App header {
-  background-color: #80ed99;
+  background-color: #262a35;
   height: 7vh;
   font-size: 1rem;
   min-height: 20px;
@@ -24,6 +24,7 @@ body {
   z-index: 99;
   padding: 5px;
   box-sizing: border-box;
+  border: solid 3px rgb(48, 48, 48);
 }
 
 .App section {
@@ -59,7 +60,7 @@ form {
   height: 10vh;
   position: fixed;
   bottom: 0;
-  background-color: #F2F2F2;
+  background-color: #262a35;
   width: 100%;
   max-width: 900px;
   display: flex;
@@ -68,17 +69,19 @@ form {
 
 form button {
   width: 20%;
-  background-color: #F2F2F2;
-  color: #80ed99;
+  background-color: #262a35;
+  color: #9e6fe9;
+  font-size: 1em;
 }
 
 
 input {
   line-height: 1.5;
   width: 100%;
-  font-size: 1.5rem;
-  background: #fff;
-  color: #282c34;
+  font-size: 1rem;
+  background-color: #f2f2f2;
+  background: #494550;
+  color: #f2f2f2;
   outline: none;
   border: none;
   padding: 0 10px;
@@ -87,15 +90,16 @@ input {
 }
 
 button {
-  background-color: #80ed99; /* Green */
+  background-color: #6942a8; /* Green */
   border: none;
   color: white;
-  padding: 2px 5px;
+  padding: 5px 5px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   cursor: pointer;
   font-size: 1rem;
+  border-radius: 5px;
 }
 
 button:disabled {
@@ -107,12 +111,14 @@ button:disabled {
 .sign-in {
   color: #282c34;
   background: white;
-  max-width: 400px;
+  width: 200px;
   margin: 0 auto;
 }
-
-
-
+.sign-in-button {
+  width: 200px;
+  text-align: center;
+  margin: 0 auto;
+}
 
 ul, li {
   text-align: left;
@@ -142,11 +148,11 @@ p {
 
 .sent p {
   color: white;
-  background: #80ed99;
+  background: #6942a8;
   align-self: flex-end;
 }
 .received p {
-  background: #e5e5ea;
+  background: #f4dcff;
   color: black;
 }
 
@@ -177,4 +183,24 @@ img {
   padding: 10px;
   margin-left: 10px;
   margin-right: 10px;
+}
+@media only screen and (max-width: 700px) {
+  .App {
+    max-width: 700px;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .App {
+    max-width: 600px;
+  }
+}
+@media only screen and (max-width: 500px) {
+  .App {
+    max-width: 500px;
+  }
+}
+@media only screen and (max-width: 400px) {
+  .App {
+    max-width: 400px;
+  }
 }

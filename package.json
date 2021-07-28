@@ -1,8 +1,8 @@
 {
   "name": "picture-chat",
-  "homepage": "http://cam-walker.github.io/picture-chat",
+  "homepage": "https://cam-walker.github.io/picture-chat",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
