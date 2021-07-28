@@ -1,6 +1,6 @@
 {
-  "name": "picture-chat",
-  "homepage": "https://cam-walker.github.io/picture-chat",
+  "name": "react-chat",
+  "homepage": "https://github.com/ol-bleu/react-chat.git",
   "version": "0.1.0",
   "private": false,
   "dependencies": {
