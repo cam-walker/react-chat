@@ -1,4 +1,5 @@
-
+## React Chat
+A simple, global chat app made with React. Currently working on implementing drawn messages. Users are authenticated through Google.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
